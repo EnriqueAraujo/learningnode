@@ -14,7 +14,10 @@ class Recipient extends Model  {
     {
       sequelize,
     }
-  )};
+  );
+
+  return this;
+  }
 }
 
 export default Recipient;
