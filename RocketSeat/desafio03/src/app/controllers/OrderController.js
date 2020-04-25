@@ -43,7 +43,7 @@ class OrderController {
     });
 
     if (!deliveryman) {
-      return res.status(400).json({ error: 'Deliveryman not found' });
+      return res.status(404).json({ error: 'Deliveryman not found' });
     }
 
     const recipient = await Recipient.findByPk(recipient_id, {
@@ -51,7 +51,7 @@ class OrderController {
     });
 
     if (!recipient) {
-      return res.status(400).json({ error: 'Recipient not found' });
+      return res.status(404).json({ error: 'Recipient not found' });
     }
 
     const {
@@ -73,13 +73,51 @@ class OrderController {
     });
   }
 
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      product: Yup.string(),
+      recipient_id: Yup.number(),
+      deliveryman_id: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation Fails' });
+    }
+
+    const { id } = req.params;
+
+    const order = await Order.findByPk(id);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    const recipient = await Recipient.findByPk(req.body.recipient_id);
+
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient not found' });
+    }
+
+    const deliveryman = await Deliveryman.findByPk(req.body.deliveryman_id);
+
+    if (!deliveryman) {
+      return res.status(400).json({ error: 'Deliveryman not found' });
+    }
+
+    const { product, recipient_id, deliveryman_id } = await order.update(
+      req.body
+    );
+
+    return res.json({ product, recipient_id, deliveryman_id });
+  }
+
   async destroy(req, res) {
     const { id } = req.params;
 
     const order = await Order.findByPk(id);
 
     if (!order) {
-      return res.status(400).json({ error: 'Order not found' });
+      return res.status(404).json({ error: 'Order not found' });
     }
 
     await Order.destroy({ where: { id } });
