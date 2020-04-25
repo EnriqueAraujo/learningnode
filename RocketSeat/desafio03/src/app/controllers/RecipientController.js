@@ -11,21 +11,30 @@ class RecipientController {
       estado: Yup.string().required().min(2).max(2),
       cidade: Yup.string().required(),
       cep: Yup.string().required().min(8).max(8),
-    })
+    });
 
-    if(!(await schema.isValid(req.body))){
-      return res.status(400).json({ error: 'Validation Fails'});
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation Fails' });
     }
 
     const { rua, numero } = req.body;
 
-    const recipient = await Recipient.findOne({ where: { rua, numero }});
+    const recipient = await Recipient.findOne({ where: { rua, numero } });
 
-    if(recipient) {
-      return res.status(400).json({ error: 'Recipient alredy exists with this data'})
+    if (recipient) {
+      return res
+        .status(400)
+        .json({ error: 'Recipient alredy exists with this data' });
     }
 
-    const { id, nome, complemento, estado, cidade, cep } = await Recipient.create(req.body);
+    const {
+      id,
+      nome,
+      complemento,
+      estado,
+      cidade,
+      cep,
+    } = await Recipient.create(req.body);
 
     return res.json({
       id,
@@ -44,14 +53,15 @@ class RecipientController {
       nome: Yup.string(),
       rua: Yup.string(),
       numero: Yup.number().when('rua', (rua, field) =>
-        rua ? field.required() : field),
+        rua ? field.required() : field
+      ),
       complemento: Yup.string(),
       estado: Yup.string().min(2).max(2),
       cidade: Yup.string(),
       cep: Yup.string().when('numero', (numero, field) =>
         numero ? field.required() : field
       ),
-    })
+    });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
@@ -59,17 +69,28 @@ class RecipientController {
 
     const { rua, numero } = req.body;
 
-    if(rua | numero){
-      const recipientExists = await Recipient.findOne({ where: { rua, numero }});
+    if (rua | numero) {
+      const recipientExists = await Recipient.findOne({
+        where: { rua, numero },
+      });
 
       if (recipientExists) {
-        return res.status(400).json({ error: 'Recipient alredy exists with this data'})
+        return res
+          .status(400)
+          .json({ error: 'Recipient alredy exists with this data' });
       }
     }
 
     const recipient = await Recipient.findByPk(req.params.id);
 
-    const { id, nome, complemento, estado, cidade, cep } = await recipient.update(req.body);
+    const {
+      id,
+      nome,
+      complemento,
+      estado,
+      cidade,
+      cep,
+    } = await recipient.update(req.body);
 
     return res.json({
       id,
@@ -80,7 +101,7 @@ class RecipientController {
       estado,
       cidade,
       cep,
-    })
+    });
   }
 }
 

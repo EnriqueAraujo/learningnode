@@ -1,22 +1,23 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Recipient extends Model  {
+class Recipient extends Model {
   static init(sequelize) {
-    super.init({
-      nome: Sequelize.STRING,
-      rua: Sequelize.STRING,
-      numero: Sequelize.INTEGER,
-      complemento: Sequelize.STRING,
-      estado: Sequelize.STRING,
-      cidade: Sequelize.STRING,
-      cep: Sequelize.STRING,
-    },
-    {
-      sequelize,
-    }
-  );
+    super.init(
+      {
+        nome: Sequelize.STRING,
+        rua: Sequelize.STRING,
+        numero: Sequelize.INTEGER,
+        complemento: Sequelize.STRING,
+        estado: Sequelize.STRING,
+        cidade: Sequelize.STRING,
+        cep: Sequelize.STRING,
+      },
+      {
+        sequelize,
+      }
+    );
 
-  return this;
+    return this;
   }
 }
 

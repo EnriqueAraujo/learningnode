@@ -4,7 +4,7 @@ module.exports = {
     node: true,
   },
   extends: [
-    ['airbnb-base', 'prettier'],
+    'airbnb-base', 'prettier',
   ],
   plugins: ['prettier'],
   globals: {
@@ -16,10 +16,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    "prttier/prettier": "error",
+    "prettier/prettier": "error",
     "class-methods-use-this": "off",
     "no-param-reassign": "off",
     "camelcase": "off",
-    "no-ununsed-vars": ["error", { "argsIgnorePattern": "next"}]
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next"}]
   },
 };
