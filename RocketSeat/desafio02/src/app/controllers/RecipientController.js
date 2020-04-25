@@ -10,7 +10,7 @@ class RecipientController {
       complemento: Yup.string(),
       estado: Yup.string().required().min(2).max(2),
       cidade: Yup.string().required(),
-      cep: Yup.string().required(),
+      cep: Yup.string().required().min(8).max(8),
     })
 
     if(!(await schema.isValid(req.body))){
@@ -22,7 +22,7 @@ class RecipientController {
     const recipient = await Recipient.findOne({ where: { rua, numero }});
 
     if(recipient) {
-      return res.status(401).json({ error: 'Recipient alredy exists with this data'})
+      return res.status(400).json({ error: 'Recipient alredy exists with this data'})
     }
 
     const { id, nome, complemento, estado, cidade, cep } = await Recipient.create(req.body);
@@ -54,7 +54,7 @@ class RecipientController {
     })
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: 'Validation fails' });
+      return res.status(400).json({ error: 'Validation fails' });
     }
 
     const { rua, numero } = req.body;
@@ -69,6 +69,8 @@ class RecipientController {
 
     const recipient = await Recipient.findByPk(req.params.id);
 
+    const { city, neighborhood, state, street } = await cepPromisse.cep(86900000).then(console.log)
+
     const { id, nome, complemento, estado, cidade, cep } = await recipient.update(req.body);
 
     return res.json({
@@ -81,7 +83,6 @@ class RecipientController {
       cidade,
       cep,
     })
-
   }
 }
 
